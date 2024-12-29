@@ -23,9 +23,10 @@ interface CustomOnItemClickListener {
     fun onItemClick(student: Student?)
 }
 
-class StudentsList : AppCompatActivity() {
+class StudentsList: AppCompatActivity() {
 
     private var students: MutableList<Student>? = null
+    private lateinit var adapter: StudentsRecyclerAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,7 +52,7 @@ class StudentsList : AppCompatActivity() {
         val layoutManager = LinearLayoutManager(this)
         studentsRecyclerView.layoutManager = layoutManager
 
-        val adapter = StudentsRecyclerAdapter(students)
+        adapter = StudentsRecyclerAdapter(students)
 
         adapter.listener = object : CustomOnItemClickListener {
             override fun onItemClick(position: Int) {
@@ -64,6 +65,11 @@ class StudentsList : AppCompatActivity() {
         }
 
         studentsRecyclerView.adapter = adapter
+    }
+
+    override fun onResume() {
+        super.onResume()
+        adapter.notifyDataSetChanged()
     }
 
     class StudentViewHolder(itemView: View, listener: CustomOnItemClickListener?): RecyclerView.ViewHolder(itemView) {
