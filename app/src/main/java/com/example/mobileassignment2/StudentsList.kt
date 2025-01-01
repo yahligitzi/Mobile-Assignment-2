@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.CheckBox
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -20,7 +21,6 @@ import com.example.mobileassignment2.model.Student
 
 interface CustomOnItemClickListener {
     fun onItemClick(position: Int)
-    fun onItemClick(student: Student?)
 }
 
 class StudentsList: AppCompatActivity() {
@@ -39,9 +39,17 @@ class StudentsList: AppCompatActivity() {
         }
 
         val addStudentButton: Button = findViewById(R.id.students_list_activity_add_student_button);
+
+
         addStudentButton.setOnClickListener {
             val intent = Intent(this, NewStudent::class.java)
             startActivity(intent)
+        }
+
+        val backToolbarIcon: ImageView = findViewById(R.id.back_button);
+
+        backToolbarIcon.setOnClickListener {
+            finish()
         }
 
         students = Model.shared.students
@@ -56,11 +64,9 @@ class StudentsList: AppCompatActivity() {
 
         adapter.listener = object : CustomOnItemClickListener {
             override fun onItemClick(position: Int) {
-                Log.d("TAG", "On click Activity listener on position $position")
-            }
-
-            override fun onItemClick(student: Student?) {
-                Log.d("TAG", "On student clicked name: ${student?.name}")
+                val intent = Intent(this@StudentsList, StudentDetails::class.java)
+                intent.putExtra("position", position)
+                startActivity(intent)
             }
         }
 
@@ -93,7 +99,6 @@ class StudentsList: AppCompatActivity() {
 
             itemView.setOnClickListener {
                 listener?.onItemClick(adapterPosition)
-                listener?.onItemClick(student)
             }
         }
 
